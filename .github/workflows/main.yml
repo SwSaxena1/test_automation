@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Create a new GitHub repository
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_CREATION }}
           NEW_REPO: ${{ github.event.inputs.repo_name }}
         run: |
           echo "Creating new repo: $NEW_REPO"
