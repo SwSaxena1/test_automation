@@ -1,37 +1,26 @@
-name: Create GitHub Repository
+name: Create GitHub Repo
 
 on:
   workflow_dispatch:
     inputs:
-      repo-name:
-        description: "repo_check"
+      repo_name: 
+        description: 'repo-test-with-pipeline'
         required: true
-      repo-description:
-        description: "Repo with Pipeline"
-        required: false
-      repo-private:
-        description: "Make repository private"
-        required: false
-        default: 'false'
+        type: string
 
 jobs:
   create-repo:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Create GitHub Repository
-      env:
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_NAME: ${{ github.event.inputs.repo-name }}
-        REPO_DESCRIPTION: ${{ github.event.inputs.repo-description }}
-        REPO_PRIVATE: ${{ github.event.inputs.repo-private }}
-      run: |
-        curl -X POST \
-          -H "Authorization: token $TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/user/repos \
-          -d "{
-            \"name\": \"$REPO_NAME\",
-            \"description\": \"$REPO_DESCRIPTION\",
-            \"private\": $REPO_PRIVATE
-          }"
+      - name: Create a new GitHub repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NEW_REPO: ${{ github.event.inputs.repo_name }}
+        run: |
+          echo "Creating new repo: $NEW_REPO"
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/user/repos \
+            -d "{\"name\":\"$NEW_REPO\"}"
