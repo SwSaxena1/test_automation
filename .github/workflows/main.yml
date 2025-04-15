@@ -3,8 +3,8 @@ name: Create GitHub Repo
 on:
   workflow_dispatch:
     inputs:
-      repo_name: 
-        description: 'repo-test-with-pipeline'
+      repo_name:
+        description: 'Name of the repo to create'
         required: true
         type: string
 
@@ -13,14 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create a new GitHub repository
+      - name: Create a new GitHub repository in the organization
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_CREATION }}
+          ORG_NAME: 'sherwin-williams-co'
           NEW_REPO: ${{ github.event.inputs.repo_name }}
         run: |
           echo "Creating new repo: $NEW_REPO"
           curl -X POST \
             -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/user/repos \
+            https://api.github.com/orgs/$ORG_NAME/repos \
             -d "{\"name\":\"$NEW_REPO\"}"
